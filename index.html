@@ -65,6 +65,36 @@
   }
   .navcta:hover{background:var(--accent);color:#08080B;}
   @media(max-width:900px){.navlinks{display:none;}}
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.logo img {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    transition: all 0.35s ease;
+}
+
+/* Cuando pasas el cursor */
+.logo:hover img {
+    filter: drop-shadow(0 0 5px #7c5cff)
+            drop-shadow(0 0 12px #7c5cff)
+            drop-shadow(0 0 22px #7c5cff);
+
+    transform: scale(1.05);
+}
+
+.logo:hover span {
+    color: #ffffff;
+    text-shadow:
+        0 0 5px #7c5cff,
+        0 0 12px #7c5cff;
+}
 
   section{position:relative;z-index:1;padding:100px 0;border-bottom:1px solid var(--line);}
 
