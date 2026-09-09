@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sebastian Marley Ramos Gómez — DERS INC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#08080B;--panel:#111114;
+    --line:rgba(237,237,240,0.10);--line-strong:rgba(237,237,240,0.22);
+    --text:#EDEDF0;--text-dim:#87868F;--accent:#7C6CF6;--live:#4EE1D6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .wrap{max-width:760px;margin:0 auto;padding:0 32px;}
+
+  header{border-bottom:1px solid var(--line);padding:28px 0;}
+  .brand{font-weight:700;font-size:18px;display:flex;align-items:center;gap:10px;}
+  .brand .dot{width:8px;height:8px;background:var(--accent);border-radius:50%;box-shadow:0 0 8px var(--accent);}
+  .back{display:inline-block;margin-top:16px;font-size:13px;color:var(--text-dim);border-bottom:1px solid var(--line-strong);transition:color .2s,border-color .2s;}
+  .back:hover{color:var(--accent);border-color:var(--accent);}
+
+  main{padding:64px 0 100px;}
+  .profile-head{display:flex;gap:32px;align-items:center;flex-wrap:wrap;}
+  .avatar{
+    width:180px;height:180px;border-radius:50%;flex-shrink:0;
+    border:1px solid var(--line-strong);background:var(--panel);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'JetBrains Mono',monospace;font-size:44px;color:var(--accent);
+  }
+  .role-tag{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:0.04em;}
+  h1{font-weight:600;font-size:clamp(28px,4vw,40px);letter-spacing:-0.01em;margin-top:10px;}
+
+  .bio{margin-top:44px;max-width:600px;color:var(--text-dim);font-size:15.5px;}
+
+  .link-grid{margin-top:44px;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);}
+  .link-cell{background:var(--bg);padding:24px 28px;transition:box-shadow .25s;position:relative;}
+  .link-cell:hover{box-shadow:0 0 24px rgba(124,108,246,0.2);z-index:5;}
+  .link-cell .plat{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:0.04em;}
+  .link-cell .handle{font-size:17px;font-weight:500;margin-top:8px;}
+  .link-cell:hover .handle{color:var(--accent);}
+  @media(max-width:600px){.link-grid{grid-template-columns:1fr !important;}.profile-head{flex-direction:column;align-items:flex-start;}}
+
+  footer{border-top:1px solid var(--line);padding:32px 0;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span>DERS INC</div>
+    <a class="back mono" href="index.html">← Volver al sitio</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="profile-head">
+      <div class="avatar">SM</div>
+      <div>
+        <div class="role-tag">CEO — MARKETING &amp; STRATEGY</div>
+        <h1>Sebastian Marley Ramos Gómez</h1>
+      </div>
+    </div>
+
+    <p class="bio">Especialista en marketing, estrategia de marca y posicionamiento de talento. Enfocado en convertir ideas en oportunidades y construir marcas con impacto.</p>
+
+    <div class="role-tag" style="margin-top:44px;">PERFILES DE SPOTIFY GESTIONADOS</div>
+    <div class="link-grid" style="margin-top:20px;grid-template-columns:1fr 1fr 1fr;">
+      <a class="link-cell" href="https://open.spotify.com/search/GTX%20Music" target="_blank" rel="noopener">
+        <div class="plat mono">SPOTIFY</div>
+        <div class="handle">GTX Music</div>
+      </a>
+      <a class="link-cell" href="https://open.spotify.com/search/MT%20Music" target="_blank" rel="noopener">
+        <div class="plat mono">SPOTIFY</div>
+        <div class="handle">MT Music</div>
+      </a>
+      <a class="link-cell" href="https://open.spotify.com/search/GT3%20Music" target="_blank" rel="noopener">
+        <div class="plat mono">SPOTIFY</div>
+        <div class="handle">GT3 Music</div>
+      </a>
+    </div>
+
+    <div class="role-tag" style="margin-top:44px;">CONTACTO</div>
+    <div class="link-grid" style="margin-top:20px;">
+      <a class="link-cell" href="https://www.instagram.com/__smmmm43?stkn=b2wxZWY3empydWtl" target="_blank" rel="noopener">
+        <div class="plat mono">INSTAGRAM</div>
+        <div class="handle">@__smmmm43</div>
+      </a>
+      <a class="link-cell" href="mailto:sebaspro0754@gmail.com">
+        <div class="plat mono">CORREO</div>
+        <div class="handle">sebaspro0754@gmail.com</div>
+      </a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">DERS INC — México · <a href="mailto:dersinc@proton.me">dersinc@proton.me</a></div>
+</footer>
+
+</body>
+</html>

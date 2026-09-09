@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DERS INC — Representación artística</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#08080B;
+    --panel:#111114;
+    --line:rgba(237,237,240,0.10);
+    --line-strong:rgba(237,237,240,0.22);
+    --text:#EDEDF0;
+    --text-dim:#87868F;
+    --accent:#7C6CF6;
+    --accent-dim:#4A3FA0;
+    --live:#4EE1D6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);color:var(--text);
+    font-family:'Space Grotesk',sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--accent);color:#08080B;}
+  a{color:inherit;text-decoration:none;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 32px;}
+
+  .bg-grid{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(var(--line) 1px,transparent 1px),
+      linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:64px 64px;
+    -webkit-mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,black 0%,transparent 75%);
+    mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,black 0%,transparent 75%);
+    opacity:0.6;
+  }
+
+  header{
+    position:sticky;top:0;z-index:20;
+    background:rgba(8,8,11,0.85);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.wrap{display:flex;align-items:center;justify-content:space-between;height:76px;}
+  .brand{font-weight:700;font-size:18px;letter-spacing:0.02em;display:flex;align-items:center;gap:12px;}
+  .brand .logo-slot{
+    width:36px;height:36px;border:1px dashed var(--line-strong);
+    display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;
+  }
+  .brand .logo-slot img{width:100%;height:100%;object-fit:contain;display:block;}
+  .brand .logo-slot .ph{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-dim);}
+  .navlinks{display:flex;gap:28px;font-size:13.5px;color:var(--text-dim);}
+  .navlinks a:hover{color:var(--text);}
+  .navcta{
+    font-size:13px;padding:9px 16px;border:1px solid var(--accent);color:var(--accent);
+    font-family:'JetBrains Mono',monospace;
+    transition:background .2s,color .2s;
+  }
+  .navcta:hover{background:var(--accent);color:#08080B;}
+  @media(max-width:900px){.navlinks{display:none;}}
+
+  section{position:relative;z-index:1;padding:100px 0;border-bottom:1px solid var(--line);scroll-margin-top:88px;}
+
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);
+    display:flex;align-items:center;gap:10px;margin-bottom:24px;letter-spacing:0.04em;
+  }
+  .eyebrow .bar{width:24px;height:1px;background:var(--accent);}
+
+  .hero{padding-top:120px;}
+  h1.headline{
+    font-weight:700;font-size:clamp(40px,7vw,80px);line-height:1.02;
+    letter-spacing:-0.02em;max-width:820px;
+  }
+  h1.headline .accent{color:var(--accent);}
+  .hero-sub{margin-top:26px;max-width:480px;font-size:16.5px;color:var(--text-dim);}
+  .hero-actions{display:flex;gap:14px;margin-top:40px;flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--accent);color:#08080B;font-weight:500;
+    padding:14px 24px;font-size:14.5px;transition:background .2s,box-shadow .25s;
+    border:1px solid var(--accent);cursor:pointer;font-family:'Space Grotesk',sans-serif;
+  }
+  .btn-primary:hover{background:#9585FF;box-shadow:0 0 24px rgba(124,108,246,0.45);}
+  .btn-ghost{
+    border:1px solid var(--line-strong);color:var(--text);
+    padding:14px 24px;font-size:14.5px;transition:border-color .2s,box-shadow .25s;
+    background:transparent;cursor:pointer;font-family:'Space Grotesk',sans-serif;
+  }
+  .btn-ghost:hover{border-color:var(--accent);box-shadow:0 0 20px rgba(124,108,246,0.2);}
+
+  .stat-strip{margin-top:90px;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);}
+  .stat-cell{padding:24px 0 0;border-right:1px solid var(--line);padding-right:20px;}
+  .stat-cell:last-child{border-right:none;}
+  .stat-cell .n{font-family:'JetBrains Mono',monospace;font-size:28px;color:var(--accent);}
+  .stat-cell .l{font-size:12.5px;color:var(--text-dim);margin-top:6px;}
+  @media(max-width:700px){.stat-strip{grid-template-columns:repeat(2,1fr);}.stat-cell{margin-top:20px;}}
+
+  h2.section-title{font-weight:600;font-size:clamp(28px,4vw,42px);letter-spacing:-0.01em;max-width:560px;}
+  .section-lead{margin-top:16px;max-width:480px;color:var(--text-dim);font-size:15.5px;}
+
+  /* NOSOTROS */
+  .nosotros-body{margin-top:40px;max-width:640px;font-size:16px;color:var(--text-dim);}
+  .nosotros-body p{margin-bottom:16px;}
+
+  /* PRESENCIA / TRUST */
+  .trust-grid{margin-top:48px;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  .trust-cell{background:var(--bg);padding:32px;transition:box-shadow .25s;position:relative;z-index:1;}
+  .trust-cell:hover{box-shadow:0 0 28px rgba(124,108,246,0.22);z-index:5;}
+  .trust-cell .tag{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:0.04em;}
+  .trust-cell h3{font-size:18px;font-weight:600;margin-top:12px;line-height:1.35;}
+  .trust-cell p{margin-top:10px;font-size:13.5px;color:var(--text-dim);}
+  @media(max-width:760px){.trust-grid{grid-template-columns:1fr;}}
+
+  .case-strip{margin-top:1px;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-top:none;}
+  .case-cell{background:var(--panel);padding:28px 32px;display:flex;align-items:baseline;gap:16px;}
+  .case-cell .big{font-family:'JetBrains Mono',monospace;font-size:32px;color:var(--live);}
+  .case-cell .desc{font-size:13.5px;color:var(--text-dim);}
+  @media(max-width:760px){.case-strip{grid-template-columns:1fr;}}
+
+  /* ROSTER */
+  .data-list{margin-top:48px;border-top:1px solid var(--line);}
+  .data-row{
+    display:grid;grid-template-columns:56px 1.3fr 1fr 120px;gap:20px;align-items:center;
+    padding:20px 0;border-bottom:1px solid var(--line);
+    transition:background .15s,box-shadow .25s,padding-left .25s;
+  }
+  .data-row:hover{background:rgba(124,108,246,0.05);box-shadow:0 0 24px rgba(124,108,246,0.18);padding-left:10px;position:relative;z-index:5;}
+  .data-row .id{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text-dim);}
+  .data-row .name{font-weight:500;font-size:18px;}
+  .data-row .role{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent);}
+  .status{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--live);
+    display:flex;align-items:center;gap:7px;justify-self:end;
+  }
+  .status .sdot{width:6px;height:6px;background:var(--live);border-radius:50%;box-shadow:0 0 6px var(--live);}
+  .sub-contact{display:flex;flex-direction:column;gap:3px;margin-top:8px;font-size:11.5px;}
+  .sub-contact a{color:var(--text-dim);}
+  .sub-contact a:hover{color:var(--accent);}
+  @media(max-width:700px){
+    .data-row{grid-template-columns:36px 1fr;row-gap:6px;}
+    .data-row .role,.status{grid-column:2;justify-self:start;}
+  }
+
+  /* MANAGEMENT */
+  .mgmt-grid{margin-top:48px;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);}
+  .mgmt-cell{background:var(--bg);padding:32px;transition:box-shadow .25s;position:relative;z-index:1;}
+  .mgmt-cell:hover{box-shadow:0 0 28px rgba(124,108,246,0.22);z-index:5;}
+  .mgmt-cell .role-tag{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--accent);letter-spacing:0.04em;}
+  .mgmt-cell h3{font-size:22px;font-weight:600;margin-top:14px;}
+  .mgmt-cell a.email{display:block;width:fit-content;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text-dim);border-bottom:1px solid var(--line-strong);}
+  .mgmt-cell a.email:hover{color:var(--accent);border-color:var(--accent);}
+  @media(max-width:700px){.mgmt-grid{grid-template-columns:1fr;}}
+
+  /* TESTIMONIOS */
+  .testi-grid{margin-top:48px;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);}
+  .testi-cell{background:var(--bg);padding:32px;display:flex;flex-direction:column;transition:box-shadow .25s;position:relative;z-index:1;}
+  .testi-cell:hover{box-shadow:0 0 28px rgba(124,108,246,0.22);z-index:5;}
+  .testi-cell .qmark{font-family:'JetBrains Mono',monospace;font-size:22px;color:var(--accent);}
+  .testi-cell h4{font-size:16px;font-weight:600;margin-top:10px;}
+  .testi-cell p{margin-top:12px;font-size:14px;color:var(--text-dim);flex:1;}
+  .testi-cell .who{margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim);border-top:1px solid var(--line);padding-top:14px;}
+  @media(max-width:760px){.testi-grid{grid-template-columns:1fr;}}
+
+  /* SERVICIOS */
+  .service-grid{margin-top:48px;display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  .service-cell{background:var(--bg);padding:32px;transition:box-shadow .25s;position:relative;z-index:1;}
+  .service-cell:hover{box-shadow:0 0 28px rgba(124,108,246,0.22);z-index:5;}
+  .service-cell .idx{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim);}
+  .service-cell h3{font-size:19px;font-weight:600;margin-top:12px;}
+  .service-cell p{margin-top:10px;font-size:14px;color:var(--text-dim);max-width:320px;}
+  @media(max-width:700px){.service-grid{grid-template-columns:1fr;}}
+
+  /* FORMULARIO */
+  .form-panel{background:var(--panel);}
+  .apply-form{margin-top:48px;display:grid;grid-template-columns:1fr 1fr;gap:20px 24px;}
+  .field{display:flex;flex-direction:column;gap:8px;}
+  .field.full{grid-column:1/-1;}
+  .field label{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--text-dim);letter-spacing:0.03em;}
+  .field input,.field select,.field textarea{
+    background:var(--bg);border:1px solid var(--line-strong);color:var(--text);
+    padding:12px 14px;font-family:'Space Grotesk',sans-serif;font-size:14.5px;
+    outline:none;transition:border-color .15s;width:100%;
+  }
+  .field input::placeholder,.field textarea::placeholder{color:#4A4A52;}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);}
+  .field textarea{resize:vertical;min-height:96px;}
+  .field select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--text-dim) 50%),linear-gradient(135deg,var(--text-dim) 50%,transparent 50%);background-position:calc(100% - 18px) center,calc(100% - 13px) center;background-size:5px 5px,5px 5px;background-repeat:no-repeat;}
+  .field-error{font-size:12px;color:#F0857D;display:none;}
+  .field.err input,.field.err select,.field.err textarea{border-color:#F0857D;}
+  .field.err .field-error{display:block;}
+  .consent-row{grid-column:1/-1;display:flex;align-items:flex-start;gap:10px;margin-top:4px;}
+  .consent-row input{width:16px;height:16px;margin-top:3px;accent-color:var(--accent);flex-shrink:0;}
+  .consent-row label{font-size:13px;color:var(--text-dim);}
+  .consent-row a{color:var(--accent);border-bottom:1px solid var(--accent-dim);}
+  .form-status{grid-column:1/-1;font-family:'JetBrains Mono',monospace;font-size:13px;margin-top:4px;min-height:18px;}
+  .form-status.ok{color:var(--live);}
+  .form-status.bad{color:#F0857D;}
+  @media(max-width:700px){.apply-form{grid-template-columns:1fr;}}
+
+  /* PRIVACIDAD */
+  .privacy-body{margin-top:32px;max-width:640px;font-size:14.5px;color:var(--text-dim);}
+  .privacy-body p{margin-bottom:14px;}
+
+  /* CONTACTO */
+  .contact{background:var(--panel);}
+  .contact-grid{margin-top:48px;display:grid;grid-template-columns:1.1fr 0.9fr;gap:56px;}
+  .contact-block h3{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:0.04em;margin-bottom:10px;}
+  .contact-block .val{font-size:19px;font-weight:500;}
+  .contact-block .val a:hover{color:var(--accent);}
+  .contact-block{padding:22px 0;border-top:1px solid var(--line);transition:box-shadow .25s,border-color .25s,padding-left .25s;}
+  .contact-block:hover{border-color:var(--accent);box-shadow:0 0 24px rgba(124,108,246,0.25);padding-left:14px;position:relative;z-index:5;}
+  .contact-actions{display:flex;flex-direction:column;gap:14px;}
+  @media(max-width:760px){.contact-grid{grid-template-columns:1fr;}}
+
+  footer{position:relative;z-index:1;padding:40px 0;}
+  .footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim);}
+  .footer-row a:hover{color:var(--accent);}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+
+<header>
+  <nav class="wrap">
+    <div class="brand">
+      <span class="logo-slot"><img src="logo.png" alt="DERS INC" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="ph" style="display:none;">LOGO</span></span>
+      DERS INC
+    </div>
+    <div class="navlinks">
+      <a href="#nosotros">Nosotros</a>
+      <a href="#roster">Roster</a>
+      <a href="#testimonios">Testimonios</a>
+      <a href="#representacion">Postúlate</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <a class="navcta" href="#contacto">CONTACTAR</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow"><span class="bar"></span>AGENCIA DE REPRESENTACIÓN — MÉXICO</div>
+    <h1 class="headline">Talento gestionado con <span class="accent">precisión</span>.</h1>
+    <p class="hero-sub">DERS INC representa músicos, compositores y actores. Negociamos, coordinamos y construimos carreras a largo plazo.</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#representacion">Quiero ser representado</a>
+      <a class="btn-ghost" href="#roster">Ver roster</a>
+    </div>
+    <div class="stat-strip">
+      <div class="stat-cell"><div class="n">05</div><div class="l">artistas activos</div></div>
+      <div class="stat-cell"><div class="n">02</div><div class="l">socios fundadores</div></div>
+      <div class="stat-cell"><div class="n">1000+</div><div class="l">plataformas digitales</div></div>
+      <div class="stat-cell"><div class="n">MX</div><div class="l">base de operación</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="nosotros">
+  <div class="wrap">
+    <div class="eyebrow"><span class="bar"></span>NOSOTROS</div>
+    <h2 class="section-title">Estrategia, no solo contratos</h2>
+    <div class="nosotros-body">
+      <p>DERS INC nació con el propósito de representar talento y crear oportunidades. Desde el inicio, nuestra visión ha sido impulsar carreras con profesionalismo, estrategia y una visión a largo plazo.</p>
+    </div>
+  </div>
+</section>
+
+<section id="presencia">
+  <div class="wrap">
+    <div class="eyebrow"><span class="bar"></span>PRESENCIA</div>
+    <h2 class="section-title">Respaldo real detrás de cada carrera</h2>
+    <p class="section-lead">Presencia en escenarios, plataformas y colaboraciones de la industria.</p>
+    <div class="trust-grid">
+      <div class="trust-cell">
+        <div class="tag mono">EXPO</div>
+        <h3>Expo Guadalajara — Unión Musical 2026</h3>
+        <p>Presentes en uno de los encuentros más importantes de la industria musical en México.</p>
+      </div>
+      <div class="trust-cell">
+        <div class="tag mono">COLABORACIÓN</div>
+        <h3>Trabajo conjunto con Masterhit</h3>
+        <p>Alianzas con productoras y sellos reconocidos de la industria.</p>
+      </div>
+      <div class="trust-cell">
+        <div class="tag mono">ALCANCE</div>
+        <h3>Presentes en +1000 plataformas digitales</h3>
+        <p>Distribución activa en perfiles exitosos de Spotify y otras plataformas.</p>
+      </div>
+    </div>
+    <div class="case-strip">
+      <div class="case-cell">
+        <div class="big mono">0 → 400K</div>
+        <div class="desc">Oyentes mensuales alcanzados en uno de nuestros casos de éxito.</div>
+      </div>
+      <div class="case-cell">
+        <div class="big mono">✓</div>
+        <div class="desc">Campañas de marketing digital con resultados comprobados.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="roster">
+  <div class="wrap">
+    <div class="eyebrow"><span class="bar"></span>ROSTER</div>
+    <h2 class="section-title">Artistas representados</h2>
+    <p class="section-lead">El talento bajo representación activa de DERS INC.</p>
+    <div class="data-list">
+      <div class="data-row">
+        <div class="id mono">A01</div>
+        <div class="name">Irvin Muñoz</div>
+        <div class="role mono">CANTANTE</div>
+        <div class="status"><span class="sdot"></span>ACTIVO</div>
+      </div>
+      <div class="data-row data-row-expand">
+        <div class="id mono">A02</div>
+        <div class="name">
+          <a href="jaime.html" style="border-bottom:1px solid var(--line-strong);">Jaime Santiago Flores Vargas</a>
+          <div class="sub-contact mono">
+            <a href="mailto:jaimesantiagofloresvargas@gmail.com">jaimesantiagofloresvargas@gmail.com</a>
+            <a href="mailto:jess4pain69@gmail.com">jess4pain69@gmail.com</a>
+            <a href="tel:+523319643744">+52 331 964 3744</a>
+          </div>
+        </div>
+        <div class="role mono">COMPOSITOR</div>
+        <div class="status"><span class="sdot"></span>ACTIVO</div>
+      </div>
+      <div class="data-row">
+        <div class="id mono">A03</div>
+        <div class="name">Hugo Yorel Nieblas León</div>
+        <div class="role mono">CANTANTE</div>
+        <div class="status"><span class="sdot"></span>ACTIVO</div>
+      </div>
+      <div class="data-row">
+        <div class="id mono">A04</div>
+        <div class="name">Rogelio Ricardo Daniel Villalvazo</div>
+        <div class="role mono">COMPOSITOR</div>
+        <div class="status"><span class="sdot"></span>ACTIVO</div>
+      </div>
+      <div class="data-row">
+        <div class="id mono">A05</div>
+        <div class="name">Mateo Azuara Gutiérrez</div>
+        <div class="role mono">ACTOR</div>
+        <div class="status"><span class="sdot"></span>ACTIVO</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="management">
+  <div class="wrap">
+    <div class="eyebrow"><span class="bar"></span>DIRECCIÓN</div>
+    <h2 class="section-title">Management</h2>
+    <p class="section-lead">Quienes dirigen la agencia y las relaciones con cada artista.</p>
+    <div class="mgmt-grid">
+      <div class="mgmt-cell">
+        <div class="role-tag">CEO</div>
+        <h3>Diego Enrique Rivas Solórzano</h3>
+        <a class="email mono" href="mailto:fnzdiego2@gmail.com">fnzdiego2@gmail.com</a>
+        <a class="email mono" href="tel:+523319060630">+52 331 906 0630</a>
+      </div>
+      <div class="mgmt-cell">
+        <div class="role-tag">CEO</div>
+        <h3><a href="sebastian.html" style="border-bottom:1px solid var(--line-strong);">Sebastian Marley Ramos Gómez</a></h3>
+        <a class="email mono" href="mailto:sebaspro0754@gmail.com">sebaspro0754@gmail.com</a>
+        <a class="email mono" href="tel:+523327508628">+52 332 750 8628</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="testimonios">
+  <div class="wrap">
+    <div class="eyebrow"><span class="bar"></span>TESTIMONIOS</div>
+    <h2 class="section-title">Lo que dicen quienes trabajan con nosotros</h2>
+    <div class="testi-grid">
+      <div class="testi-cell">
+        <div class="qmark mono">“</div>
+        <h4>Una representación que entiende mi visión</h4>
+        <p>DERS INC no solo se encarga de representar mi carrera; entiende hacia dónde quiero llevarla. Su equipo ha sido clave para abrir nuevas oportunidades y construir una imagen mucho más sólida.</p>
+        <div class="who mono">— ARTISTA REPRESENTADO</div>
+      </div>
+      <div class="testi-cell">
+        <div class="qmark mono">“</div>
+        <h4>Profesionalismo desde el primer contacto</h4>
+        <p>Trabajar con DERS INC ha sido una experiencia completamente diferente. La comunicación, el seguimiento y la manera en que manejan cada oportunidad transmiten mucha confianza.</p>
+        <div class="who mono">— CLIENTE / COLABORADOR</div>
+      </div>
+      <div class="testi-cell">
+        <div class="qmark mono">“</div>
+        <h4>Más que una agencia</h4>
+        <p>Encontré en DERS INC un equipo que realmente se involucra en el proyecto. Han sabido conectar mi propuesta con las personas y oportunidades correctas.</p>
+        <div class="who mono">— ARTISTA REPRESENTADO</div>
+      </div>
+      <div class="testi-cell">
+        <div class="qmark mono">“</div>
+        <h4>Una visión clara de crecimiento</h4>
+        <p>DERS INC tiene una forma muy estratégica de trabajar. Cada decisión está enfocada en construir algo a largo plazo y no solamente en conseguir una oportunidad momentánea.</p>
+        <div class="who mono">— CLIENTE</div>
+      </div>
+      <div class="testi-cell">
+        <div class="qmark mono">“</div>
+        <h4>El equipo detrás de cada oportunidad</h4>
+        <p>Desde que comenzamos a trabajar juntos, he sentido que mi carrera está en manos de un equipo que se toma cada proyecto con seriedad. DERS INC representa confianza, estrategia y profesionalismo.</p>
+        <div class="who mono">— ARTISTA REPRESENTADO</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="servicios">
+  <div class="wrap">
+    <div class="eyebrow"><span class="bar"></span>SERVICIOS</div>
+    <h2 class="section-title">Qué hacemos por cada artista</h2>
+    <div class="service-grid">
+      <div class="service-cell">
+        <div class="idx mono">01</div>
+        <h3>Negociación de contratos</h3>
+        <p>Revisión y negociación de acuerdos discográficos, de producción y de marca.</p>
+      </div>
+      <div class="service-cell">
+        <div class="idx mono">02</div>
+        <h3>Booking y presentaciones</h3>
+        <p>Coordinación de fechas, logística y rutas con venues y promotores.</p>
+      </div>
+      <div class="service-cell">
+        <div class="idx mono">03</div>
+        <h3>Estrategia de carrera</h3>
+        <p>Planeación a mediano y largo plazo para cada artista del roster.</p>
+      </div>
+      <div class="service-cell">
+        <div class="idx mono">04</div>
+        <h3>Alianzas y marca</h3>
+        <p>Conexión con marcas y proyectos alineados con la identidad de cada artista.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="representacion" class="form-panel">
+  <div class="wrap">
+    <div class="eyebrow"><span class="bar"></span>POSTULACIÓN</div>
+    <h2 class="section-title">¿Quieres ser representado?</h2>
+    <p class="section-lead">¿Tienes talento, trayectoria y una visión clara para tu carrera? Cuéntanos sobre ti y nuestro equipo revisará tu propuesta.</p>
+
+    <form class="apply-form" id="apply-form" novalidate>
+      <div class="field" data-field="nombre">
+        <label for="f-nombre">Nombre completo</label>
+        <input type="text" id="f-nombre" placeholder="Escribe tu nombre">
+        <span class="field-error">Ingresa tu nombre completo.</span>
+      </div>
+      <div class="field" data-field="correo">
+        <label for="f-correo">Correo electrónico</label>
+        <input type="email" id="f-correo" placeholder="Tu correo">
+        <span class="field-error">Ingresa un correo válido.</span>
+      </div>
+      <div class="field" data-field="telefono">
+        <label for="f-telefono">Teléfono</label>
+        <input type="tel" id="f-telefono" placeholder="Tu número">
+        <span class="field-error">Ingresa un teléfono válido (mínimo 8 dígitos).</span>
+      </div>
+      <div class="field" data-field="ubicacion">
+        <label for="f-ubicacion">Ciudad / país</label>
+        <input type="text" id="f-ubicacion" placeholder="Tu ubicación">
+        <span class="field-error">Ingresa tu ciudad y país.</span>
+      </div>
+      <div class="field" data-field="disciplina">
+        <label for="f-disciplina">Disciplina</label>
+        <select id="f-disciplina">
+          <option value="">Selecciona una opción</option>
+          <option>Música</option>
+          <option>Actuación</option>
+          <option>Influencer</option>
+          <option>Otro</option>
+        </select>
+        <span class="field-error">Selecciona una disciplina.</span>
+      </div>
+      <div class="field" data-field="redes">
+        <label for="f-redes">Redes sociales</label>
+        <input type="text" id="f-redes" placeholder="Instagram / TikTok / YouTube / otras">
+        <span class="field-error">Comparte al menos una red social.</span>
+      </div>
+      <div class="field full" data-field="experiencia">
+        <label for="f-experiencia">Experiencia</label>
+        <textarea id="f-experiencia" placeholder="Cuéntanos brevemente sobre tu trayectoria"></textarea>
+        <span class="field-error">Cuéntanos brevemente tu trayectoria.</span>
+      </div>
+      <div class="field full" data-field="proyecto">
+        <label for="f-proyecto">Cuéntanos sobre tu proyecto</label>
+        <textarea id="f-proyecto" placeholder="¿Qué haces y qué buscas lograr?"></textarea>
+        <span class="field-error">Cuéntanos sobre tu proyecto.</span>
+      </div>
+      <div class="field full" data-field="enlace">
+        <label for="f-enlace">Enlace a tu trabajo</label>
+        <input type="text" id="f-enlace" placeholder="Portafolio / música / videos / sitio web">
+        <span class="field-error">Comparte un enlace a tu trabajo.</span>
+      </div>
+
+      <div class="consent-row" data-field="consent">
+        <input type="checkbox" id="f-consent">
+        <label for="f-consent">He leído y acepto el <a href="privacidad.html" target="_blank" rel="noopener">Aviso de Privacidad</a> y los Términos de Uso.</label>
+      </div>
+      <span class="field-error" id="consent-error" style="grid-column:1/-1;">Debes aceptar el Aviso de Privacidad para continuar.</span>
+
+      <div class="form-status" id="form-status"></div>
+      <div>
+        <button type="submit" class="btn-primary" id="submit-btn" disabled style="opacity:0.4;cursor:not-allowed;">ENVIAR SOLICITUD</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section id="contacto" class="contact">
+  <div class="wrap">
+    <div class="eyebrow"><span class="bar"></span>CONTACTO</div>
+    <h2 class="section-title">Hablemos</h2>
+    <p class="section-lead">Para management, bookings o colaboraciones.</p>
+    <div class="contact-grid">
+      <div>
+        <div class="contact-block">
+          <h3>CORREO</h3>
+          <div class="val"><a href="mailto:dersinc@proton.me" class="mailto-btn" data-email="dersinc@proton.me">dersinc@proton.me</a></div>
+        </div>
+        <div class="contact-block">
+          <h3>TELÉFONO</h3>
+          <div class="val"><a href="tel:+523319066830">+52 331 906 6830</a></div>
+        </div>
+        <div class="contact-block">
+          <h3>DIEGO RIVAS — CEO</h3>
+          <div class="val" style="font-size:16px;"><a href="mailto:fnzdiego2@gmail.com" class="mailto-btn" data-email="fnzdiego2@gmail.com">fnzdiego2@gmail.com</a></div>
+          <div class="val" style="font-size:16px;"><a href="tel:+523319060630">+52 331 906 0630</a></div>
+        </div>
+        <div class="contact-block">
+          <h3>SEBASTIAN RAMOS — CEO</h3>
+          <div class="val" style="font-size:16px;"><a href="mailto:sebaspro0754@gmail.com" class="mailto-btn" data-email="sebaspro0754@gmail.com">sebaspro0754@gmail.com</a></div>
+          <div class="val" style="font-size:16px;"><a href="tel:+523327508628">+52 332 750 8628</a></div>
+        </div>
+        <div class="contact-block">
+          <h3>INSTAGRAM</h3>
+          <div class="val"><a href="https://instagram.com/diegorssss" target="_blank" rel="noopener">@diegorssss</a></div>
+        </div>
+      </div>
+      <div class="contact-actions" style="padding-top:22px;">
+        <a class="btn-primary" style="text-align:center;" href="https://wa.me/523319066830" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+        <a class="btn-ghost mailto-btn" style="text-align:center;" href="mailto:dersinc@proton.me" data-email="dersinc@proton.me">Enviar correo</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-row">
+    <div>DERS INC — México</div>
+    <div><a href="mailto:dersinc@proton.me" class="mailto-btn" data-email="dersinc@proton.me">dersinc@proton.me</a> · <a href="https://instagram.com/diegorssss" target="_blank" rel="noopener">@diegorssss</a></div>
+  </div>
+</footer>
+
+<script>
+  var form = document.getElementById('apply-form');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var status = document.getElementById('form-status');
+    var required = ['nombre','correo','telefono','ubicacion','disciplina','redes','experiencia','proyecto','enlace'];
+    var ok = true;
+    var values = {};
+
+    required.forEach(function(key){
+      var wrap = document.querySelector('[data-field="' + key + '"]');
+      var input = wrap.querySelector('input,select,textarea');
+      var val = input.value.trim();
+      values[key] = val;
+      var valid = val.length > 0;
+      if(key === 'correo' && val){
+        valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+      }
+      if(key === 'telefono' && val){
+        valid = /^[0-9+()\s-]{8,}$/.test(val);
+      }
+      wrap.classList.toggle('err', !valid);
+      if(!valid) ok = false;
+    });
+
+    var consentBox = document.getElementById('f-consent');
+    var consentError = document.getElementById('consent-error');
+    if(!consentBox.checked){
+      consentError.style.display = 'block';
+      ok = false;
+    } else {
+      consentError.style.display = 'none';
+    }
+
+    if(!ok){
+      status.textContent = 'Revisa los campos marcados antes de continuar.';
+      status.className = 'form-status bad';
+      return;
+    }
+
+    var body = 'Nombre completo: ' + values.nombre + '\n' +
+      'Correo electrónico: ' + values.correo + '\n' +
+      'Teléfono: ' + values.telefono + '\n' +
+      'Ciudad / país: ' + values.ubicacion + '\n' +
+      'Disciplina: ' + values.disciplina + '\n' +
+      'Redes sociales: ' + values.redes + '\n' +
+      'Experiencia: ' + values.experiencia + '\n' +
+      'Proyecto: ' + values.proyecto + '\n' +
+      'Enlace a su trabajo: ' + values.enlace;
+
+    var mailto = 'mailto:dersinc@proton.me?subject=' + encodeURIComponent('Solicitud de representación — ' + values.nombre) + '&body=' + encodeURIComponent(body);
+    window.location.href = mailto;
+
+    status.textContent = 'Abriendo tu correo para enviar la solicitud a DERS INC.';
+    status.className = 'form-status ok';
+  });
+
+  var consentBoxEl = document.getElementById('f-consent');
+  var submitBtn = document.getElementById('submit-btn');
+  function syncSubmitState(){
+    submitBtn.disabled = !consentBoxEl.checked;
+    submitBtn.style.opacity = consentBoxEl.checked ? '1' : '0.4';
+    submitBtn.style.cursor = consentBoxEl.checked ? 'pointer' : 'not-allowed';
+    if(consentBoxEl.checked){
+      document.getElementById('consent-error').style.display = 'none';
+    }
+  }
+  consentBoxEl.addEventListener('change', syncSubmitState);
+  syncSubmitState();
+
+  document.querySelectorAll('.mailto-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var email = btn.getAttribute('data-email');
+      var original = btn.textContent;
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(email).then(function(){
+          btn.textContent = 'Correo copiado: ' + email;
+          setTimeout(function(){ btn.textContent = original; }, 2500);
+        }).catch(function(){});
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
